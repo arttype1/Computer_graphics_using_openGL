@@ -8,7 +8,8 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from copy import copy
-from random import randint
+import time
+import random as rd
 class GLintPoint:
     def __init__(self, x, y):
         assert isinstance(x, int)
@@ -17,8 +18,8 @@ class GLintPoint:
         self.y = y
 
 def myInit():
-    glClearColor(0.0,0.0,0.0,0.0)   #black sky
-    glColor3f(1.0,1.0,1.0)          #white stars
+    glClearColor(0.0,0.0,0.0,0.0)
+    glColor3f(1.0,1.0,1.0)
     glPointSize(1.0)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
@@ -27,12 +28,12 @@ def myInit():
 def Sierpinski():
     glClear(GL_COLOR_BUFFER_BIT)
     T = [GLintPoint(1,1), GLintPoint(1200,1), GLintPoint(600,960)]
-    index =  randint(0, 2)
+    index =  rd.randint(0, 2)
     point = copy(T[index])
     glBegin(GL_POINTS)
     glVertex2f(point.x,point.y)
     for i in range(100000):
-        index = randint(0, 2)
+        index = rd.randint(0, 2)
         point.x = (point.x + T[index].x) / 2
         point.y = (point.y + T[index].y) / 2
         glVertex2f(point.x,point.y)
@@ -44,7 +45,7 @@ def main():
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB)
     glutInitWindowSize(1280,960)
     glutInitWindowPosition(100,150)
-    glutCreateWindow(b"mywindow")
+    glutCreateWindow(b"the Sierpinski gasket")
 
 #register the callback functions
     glutDisplayFunc(Sierpinski)
