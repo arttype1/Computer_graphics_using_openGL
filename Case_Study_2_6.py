@@ -2,6 +2,7 @@
 # all code by George A. Merrill (except where otherwise noted)
 #################################################################################################
 # Case Study 2.2 Polyline editor
+# ver0.02 can nw select a point on the polyline with left mouse button
 # ver0.01 reads points from a txt file and stores them in a'polyline' and draws the polyline
 #################################################################################################
 import sys
@@ -9,28 +10,49 @@ import OpenGL
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
+from math import sqrt
 
 screenWidth = 640
 screenHeight = 480
 polyline = []
+poly_index = 0
+
+def distance(x1, y1, x2, y2):
+    return sqrt((x2-x1)**2 + (y2-y1)**2)
 
 def myInit():
     glClearColor(0.0, 0.0, 0.0, 0.0)
     glColor3f(1.0, 1.0, 1.0)
-    glPointSize(1.0)
+    glPointSize(8.0)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
     gluOrtho2D(0.0, screenWidth, 0.0, screenHeight)
 
+def myMouse(button, state, x, y):
+    global poly_index
+    global polyline
+    if button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
+        dist_list= []
+        for item in polyline:
+            dist_list.append(distance(x, screenHeight - y,item[0],item[1]))
+        print(dist_list)
+        poly_index = dist_list.index(min(dist_list))
+    if button == GLUT_RIGHT_BUTTON and state == GLUT_DOWN:
+        pass
 
 def myDisplay():
     glClear(GL_COLOR_BUFFER_BIT)
     glColor3f(1, 1, 1)
     global polyline
+    global poly_index
 
     glBegin(GL_LINE_STRIP)
     for i in polyline:
         glVertex2i(i[0], i[1])
+    glEnd()
+    glBegin(GL_POINTS)
+    glColor3f(0,1,0)
+    glVertex2i(polyline[poly_index][0], polyline[poly_index][1])
     glEnd()
     glFlush()
 
@@ -44,7 +66,7 @@ def main():
     # register the callback functions
     glutDisplayFunc(myDisplay)
     #    glutReshapeFunc(myReshape)
-    #    glutMouseFunc(myMouse)
+    glutMouseFunc(myMouse)
     #    glutKeyboardFunc(myKeyboard)
     #    glutMotionFunc(myMove)
     f = open('myfile.txt', 'r')
