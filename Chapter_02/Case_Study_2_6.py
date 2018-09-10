@@ -1,7 +1,8 @@
 # Examples and Exercises From 'Computer Graphics using Open GL" by Hill 2nd Ed
 # all code by George A. Merrill (except where otherwise noted)
 #################################################################################################
-# Case Study 2.2 Polyline editor
+# Case Study 2.6 Polyline editor
+# ver0.03 can (a)dd and (d)elete points.
 # ver0.02 can now select a point on the polyline with left mouse button and move it by dragging.
 # ver0.01 reads points from a txt file and stores them in a'polyline' and draws the polyline
 #################################################################################################
@@ -45,7 +46,29 @@ def myMouse(button, state, x, y):
 def myMove(x, y):
     global poly_index
     global polyline
-    polyline[poly_index] = (x, screenHeight - y)
+    if not poly_index == -1:
+        polyline[poly_index] = (x, screenHeight - y)
+
+def myKeyboard(key, x, y):
+    global poly_index
+    global polyline
+    key = key.decode('ascii')
+    if key == 's':
+        pass
+    if key == 'a':
+        polyline.insert(poly_index + 1, (x, screenHeight -y))
+        poly_index += 1
+        print(f'polyine = {polyline}')
+    if key == 'd':
+        if not poly_index == -1:
+            polyline.pop(poly_index,)
+            poly_index -= 1
+            print(f'polyine = {polyline}')
+        else:
+            print(f'polyine = {polyline}')
+    else:
+        pass
+    glutPostRedisplay()
 
 
 def myDisplay():
@@ -76,9 +99,9 @@ def main():
     glutDisplayFunc(myDisplay)
     #    glutReshapeFunc(myReshape)
     glutMouseFunc(myMouse)
-    #    glutKeyboardFunc(myKeyboard)
+    glutKeyboardFunc(myKeyboard)
     glutMotionFunc(myMove)
-    f = open('myfile.txt', 'r')
+    f = open('newfile.txt', 'w+')
     poly_as_str = f.read()
     f.close()
     polys = poly_as_str.split()
