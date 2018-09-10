@@ -2,7 +2,7 @@
 # all code by George A. Merrill (except where otherwise noted)
 #################################################################################################
 # Case Study 2.2 Polyline editor
-# ver0.02 can now select a point on the polyline with left mouse button and move it by dragging.
+# ver0.02 can now select a point on the polyline with left mouse button and move it.
 # ver0.01 reads points from a txt file and stores them in a'polyline' and draws the polyline
 #################################################################################################
 import sys
