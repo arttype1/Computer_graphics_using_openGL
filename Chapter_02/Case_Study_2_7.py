@@ -18,10 +18,10 @@ import random
 
 
 #SETUP
-screenWidth = 640
-screenHeight = 480
-numRows = 21
-numCols = 30
+screenWidth = 1280
+screenHeight = 960
+numRows = 93
+numCols = 125
 make_maze = True
 un_visited: List[Any] =[]
 lab_mouse = [random.randint(1, numCols-1), random.randint(1, numRows-1)]
@@ -68,7 +68,7 @@ def move_lab():
     global walls
     global make_maze
     global un_visited
-    if make_maze:
+    while make_maze:
         nbors = find_nbors(lab_mouse[1], lab_mouse[0])
         if len(nbors) > 0:
             can_go =[item for item in nbors if has_all_walls(item)]
@@ -99,8 +99,6 @@ def move_lab():
                     lab_mouse[1] = mouse_goto[1]
                 else:
                     make_maze = False
-    else:
-        pass
     glutPostRedisplay()
 
 
@@ -121,23 +119,23 @@ def myDisplay():
     glBegin(GL_LINES)
     for j in range(numRows+1):
         # y = screenHeight - (j  * 20)
-        y = (j * 20)
+        y = (j * 10)
         for i in range(numCols+1):
             if walls[j][i][1] == 1:
-                glVertex2i(i * 20 + 19, y)
-                glVertex2i(i * 20 + 19, y + 20)
+                glVertex2i(i * 10 + 10, y)
+                glVertex2i(i * 10 + 10, y + 10)
             if walls[j][i][0] == 1:
-                glVertex2i(i * 20, y + 20)
-                glVertex2i(i * 20 + 19, y + 20)
+                glVertex2i(i * 10, y + 10)
+                glVertex2i(i * 10 + 10, y + 10)
     glEnd()
 # #####################Draw the mouse########################
     glColor3f(1, 0, 0)
     glEnable(GL_POINT_SMOOTH)
     glEnable(GL_BLEND)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-    glPointSize(14)
+    glPointSize(7)
     glBegin(GL_POINTS)
-    glVertex2i(lab_mouse[0]*20 + 9, (lab_mouse[1]*20 +10))
+    glVertex2i(lab_mouse[0]*10 + 5, (lab_mouse[1]*10 +5))
     glEnd()
 # #####################mEnd of drawing########################
     glFlush()
