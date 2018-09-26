@@ -7,39 +7,55 @@ from OpenGL.GLU import *
 
 class Canvas:
     """
-    cp 'center point' is a tuple (x,y)
-    viewport and window are tuples (left, right, bottom, top)
+    cp 'center point' is a list [x,y]
+    viewport and window are lists (left, right, bottom, top)
     """
     def __init__(self, width, height, window_title: str):
-        self.cp = (0, 0)
-        self.viewport = (0, width, 0,  height)
-        self.window = (0, width, 0,  height)
+        self.cp = [0, 0]
         glutInit(sys.argv)
         glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB)
         glutInitWindowSize(width, height)
         glutInitWindowPosition(100, 150)
-        glutCreateWindow(b'{window_title}')
+        glutCreateWindow(window_title.encode('ascii'))
+        self.window = [0, width, 0,  height]
+        self.viewport = [0, width, 0,  height]
+        self.color = [0, 0, 0]
+        self.set_window(0, width, 0, height)
+        self.set_viewport(0, width, 0, height)
 
     @property
     def window_aspect(self):  # width / height
         return (self.window[1] - self.window[0]) / (self.window[3] - self.window[2])
 
-    def clear_screen(self):
-        pass
+    @staticmethod
+    def clear_screen():
+        glClear(GL_COLOR_BUFFER_BIT)
 
-    def set_bc(self, r, g, b):
-        pass
+    @staticmethod
+    def set_bc(r, g, b):
+        glClearColor(r, g, b, 0.0)
 
     def set_color(self, r, g, b):
-        pass
+        self.color = [r, g, b]
+        glColor3f(r, g, b)
+
+    def set_window(self, l, r, b, t):
+        glMatrixMode(GL_PROJECTION)
+        glLoadIdentity()
+        gluOrtho2D(l, r, b, t)
+        self.window = [l , r, b, t]
+
+    def set_viewport(self, left, right, bottom, top):
+        glViewport(left, bottom, right - left, top - bottom)
+        self.viewport = [left, right, bottom, top]
 
     def line_to(self, x, y):
-         glBegin(GL_LINES)
-         glVertex2f(self.cp[0], self.cp[y])
-         glVertex2f(x, y)
-         glEnd()
-         glFlush()
-         self.cp = (x, y)
+        glBegin(GL_LINES)
+        glVertex2f(self.cp[0], self.cp[1])
+        glVertex2f(x, y)
+        glEnd()
+        glFlush()
+        self.cp = [x, y]
 
-    def move_to(self, x, y):
-        self.cp = (x, y)
+    def line_rel(self, dx, dy):
+        self.line_to(self.cp[0]+ dx, self.cp[1] + dy)
