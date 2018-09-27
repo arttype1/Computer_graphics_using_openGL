@@ -3,15 +3,17 @@ import OpenGL
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
+import math
 
 
 class Canvas:
     """
-    cp 'center point' is a list [x,y]
+    cp 'current position' is a list [x,y]
+    cd 'current direction' if a float representing an angle
     viewport and window are lists (left, right, bottom, top)
+    color is used for drawing (red, green, blue)
     """
     def __init__(self, width, height, window_title: str):
-        self.cp = [0, 0]
         glutInit(sys.argv)
         glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB)
         glutInitWindowSize(width, height)
@@ -20,6 +22,8 @@ class Canvas:
         self.window = [0, width, 0,  height]
         self.viewport = [0, width, 0,  height]
         self.color = [0, 0, 0]
+        self.cp = [0, 0]
+        self.cd = 0.0
         self.set_window(0, width, 0, height)
         self.set_viewport(0, width, 0, height)
 
@@ -59,3 +63,15 @@ class Canvas:
 
     def line_rel(self, dx, dy):
         self.line_to(self.cp[0]+ dx, self.cp[1] + dy)
+
+    def turn(self, ang):
+        self.cd += ang
+
+    def forward(self, dist, isVisible: bool = True):
+        rad_per_deg = 0.017453393
+        x = self.cp[0] + (dist * math.cos(rad_per_deg * self.cd))
+        y = self.cp[1] + (dist * math.sin(rad_per_deg * self.cd))
+        if isVisible:
+            self.line_to(x, y)
+        else:
+            self.cp = [x, y]
