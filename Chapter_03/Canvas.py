@@ -15,7 +15,7 @@ class Canvas:
     """
     def __init__(self, width, height, window_title: str):
         glutInit(sys.argv)
-        glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB)
+        glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
         glutInitWindowSize(width, height)
         glutInitWindowPosition(100, 150)
         glutCreateWindow(window_title.encode('ascii'))
@@ -32,12 +32,20 @@ class Canvas:
         return (self.window[1] - self.window[0]) / (self.window[3] - self.window[2])
 
     @staticmethod
+    def swap():
+        glutSwapBuffers()
+
+    @staticmethod
     def clear_screen():
         glClear(GL_COLOR_BUFFER_BIT)
 
     @staticmethod
     def set_bc(r, g, b):
         glClearColor(r, g, b, 0.0)
+
+    @staticmethod
+    def thick(t):
+        glLineWidth(t)
 
     def set_color(self, r, g, b):
         self.color = [r, g, b]
