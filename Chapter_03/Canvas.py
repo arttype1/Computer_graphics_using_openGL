@@ -17,7 +17,7 @@ class Canvas:
         glutInit(sys.argv)
         glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
         glutInitWindowSize(width, height)
-        glutInitWindowPosition(100, 150)
+        glutInitWindowPosition(0, 0)
         glutCreateWindow(window_title.encode('ascii'))
         self.window = [0, width, 0,  height]
         self.viewport = [0, width, 0,  height]
